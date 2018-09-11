@@ -20,7 +20,7 @@ namespace Client
 
         static void StartClient()
         {
-            var buffer = new byte[1024];
+            var buffer = new byte[100];
 
             Socket _client = new Socket(AddressFamily.InterNetwork,
             SocketType.Stream, ProtocolType.Tcp);
@@ -33,7 +33,7 @@ namespace Client
                 var numbers = Console.ReadLine();
                 _client.Send(Encoding.UTF8.GetBytes(numbers.Trim()), SocketFlags.None);
                 var result = _client.Receive(buffer, SocketFlags.None);
-                var answer = Encoding.UTF8.GetString(buffer).Trim('\0');
+                var answer = Encoding.UTF8.GetString(buffer);
                 Console.WriteLine($"Result was: {answer}");
             }
         }

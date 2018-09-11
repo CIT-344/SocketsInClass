@@ -36,7 +36,7 @@ namespace Server
 
                 client.Receive(buffer, SocketFlags.None);
                 var number = Encoding.UTF8.GetString(buffer).Trim('\0');
-                var numbers = number.Split(' ');
+                var numbers = number.Replace("+", " ").Replace("-", " ").Split(' ');
                 var result = Convert.ToInt32(numbers[0]) + Convert.ToInt32(numbers[1]);
                 client.Send(Encoding.UTF8.GetBytes(result.ToString()), SocketFlags.None);
             }
