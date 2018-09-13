@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -14,6 +15,9 @@ namespace StreamServer
 
         static CancellationTokenSource TokenSource = new CancellationTokenSource();
 
+        static List<ClientConnection> Clients = new List<ClientConnection>();
+
+        
         static void Main(string[] args)
         {
             IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Any, 11000);
@@ -27,22 +31,20 @@ namespace StreamServer
             while (!TokenSource.IsCancellationRequested)
             {
                 var _client = _server.Accept();
+                var ClientConnection = new ClientConnection(_client, Guid.NewGuid());
+                Clients.Add(ClientConnection);
 
-                Task.Factory.StartNew(() => 
-                {
-                    StartClientListener(_client);
-                }, TokenSource.Token);
+                BroadcastConnectedEvent(ClientConnection).Wait();
             }
         }
 
-        static void StartClientListener(Socket _client)
+
+        static async Task BroadcastConnectedEvent(ClientConnection Client)
         {
-            using (var bReader = new BinaryReader(new NetworkStream(_client, FileAccess.ReadWrite), Encoding.UTF8, true))
+            foreach (var client in Clients)
             {
-                while (_client.Connected)
-                {
-                    Console.WriteLine($"Client Said: {bReader.ReadString()}");
-                }
+                // Send all a message
+                await client.SendAsync($"Client {Client.ClientID.ToString()} has connected");
             }
         }
     }
