@@ -13,6 +13,6 @@ namespace IStreaming.Shared_Models
         }
 
         void AddEvent(EventModel Event);
-        void GetEvent(String EventName);
+        EventModel GetEvent(String EventName);
     }
 }

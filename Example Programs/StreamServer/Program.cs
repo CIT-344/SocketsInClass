@@ -25,6 +25,7 @@ namespace StreamServer
         static event ConnectionHandler OnClientDisconnect;
         static event InBoundMessageHandler OnClientMessage;
 
+        static List<EventModel> Events = new List<EventModel>();
         
         
         static void Main(string[] args)
@@ -53,6 +54,19 @@ namespace StreamServer
         {
             throw new NotImplementedException();
         }
+
+
+
+        public static void AddEvent(EventModel Event)
+        {
+
+        }
+
+        public static EventModel GetEvent(String EventName)
+        {
+
+        }
+
 
         private async static void ClientConnectionEvent(ClientConnection Sender, bool IsDisconnect)
         {
