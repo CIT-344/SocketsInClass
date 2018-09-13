@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using Streaming.Shared_Models;
 
 namespace StreamClient
 {
@@ -35,15 +36,13 @@ namespace StreamClient
                             _client.Disconnect(false);
                             break;
                         default:
-                            bWriter.Write(line);
+                            bWriter.WriteDataModel(new Communication_Model("Msg", line));
                             break;
                     }
 
                     
                 }
             }
-
-
             Console.WriteLine("Disconnected from Server");
             Console.WriteLine("Press any key to exit");
             Console.ReadKey();
@@ -60,8 +59,8 @@ namespace StreamClient
                         while (Server.Connected)
                         {
                             // Keep Reading and waiting
-                            var result = StreamReader.ReadString();
-                            Console.WriteLine($"Server said {result}");
+                            var result = StreamReader.ReadDataModel();
+                            Console.WriteLine($"Server said {result.Body}");
                         }
                     }
                 }
@@ -70,8 +69,6 @@ namespace StreamClient
                     
                 }
             }
-
-            
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using IStreaming.Shared_Models;
+using Streaming.Shared_Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,7 +13,8 @@ using System.Threading.Tasks;
 namespace StreamServer
 {
     public delegate void ConnectionHandler(ClientConnection sender, bool IsDisconnect);
-    class Program
+    public delegate void InBoundMessageHandler(ClientConnection Connection,Communication_Model Data);
+    class Program: IEventStorage
     {
         static Socket _server;
 
@@ -20,10 +23,12 @@ namespace StreamServer
         static List<ClientConnection> Clients = new List<ClientConnection>();
 
         static event ConnectionHandler OnClientDisconnect;
+        static event InBoundMessageHandler OnClientMessage;
+
+        
         
         static void Main(string[] args)
         {
-
             Console.Title = "Server";
 
             IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Any, 11000);
@@ -34,13 +39,19 @@ namespace StreamServer
             _server.Listen(10);
 
             OnClientDisconnect += ClientConnectionEvent;
+            OnClientMessage += ClientMessageReceieved;
 
             while (!TokenSource.IsCancellationRequested)
             {
                 var _client = _server.Accept();
-                var ClientConnection = new ClientConnection(_client, Guid.NewGuid(), OnClientDisconnect);
+                var ClientConnection = new ClientConnection(_client, Guid.NewGuid(), OnClientDisconnect, OnClientMessage);
                 
             }
+        }
+
+        private static void ClientMessageReceieved(ClientConnection Connection,Communication_Model Data)
+        {
+            throw new NotImplementedException();
         }
 
         private async static void ClientConnectionEvent(ClientConnection Sender, bool IsDisconnect)
@@ -65,7 +76,7 @@ namespace StreamServer
             foreach (var client in Clients)
             {
                 // Send all a message
-                await client.SendAsync($"Client {Client.ClientID.ToString()} has connected");
+                await client.SendAsync("DISCONNECT",$"Client {Client.ClientID.ToString()} has connected");
             }
         }
 
@@ -74,7 +85,7 @@ namespace StreamServer
             foreach (var client in Clients)
             {
                 // Send all a message
-                await client.SendAsync($"Client {Client.ClientID.ToString()} has connected");
+                await client.SendAsync("CONNECT",$"Client {Client.ClientID.ToString()} has connected");
             }
         }
     }

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamServer", "StreamServe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamClient", "StreamClient\StreamClient.csproj", "{591FF5A8-1140-4584-A028-FC21798B61A6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IStreaming", "IStreaming\IStreaming.csproj", "{A9248DB3-FA90-4205-9118-9A9C6E3026C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{591FF5A8-1140-4584-A028-FC21798B61A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{591FF5A8-1140-4584-A028-FC21798B61A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{591FF5A8-1140-4584-A028-FC21798B61A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9248DB3-FA90-4205-9118-9A9C6E3026C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9248DB3-FA90-4205-9118-9A9C6E3026C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9248DB3-FA90-4205-9118-9A9C6E3026C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9248DB3-FA90-4205-9118-9A9C6E3026C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
