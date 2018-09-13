@@ -32,8 +32,8 @@ namespace Client
                 Console.WriteLine("Enter two numbers separted by a space");
                 var numbers = Console.ReadLine();
                 _client.Send(Encoding.UTF8.GetBytes(numbers.Trim()), SocketFlags.None);
-                var result = _client.Receive(buffer, SocketFlags.None);
-                var answer = Encoding.UTF8.GetString(buffer);
+                var bytesSent = _client.Receive(buffer, SocketFlags.None);
+                var answer = Encoding.UTF8.GetString(buffer.Take(bytesSent).ToArray());
                 Console.WriteLine($"Result was: {answer}");
             }
         }

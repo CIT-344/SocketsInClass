@@ -34,8 +34,8 @@ namespace Server
             {
                 var buffer = new byte[1024];
 
-                client.Receive(buffer, SocketFlags.None);
-                var number = Encoding.UTF8.GetString(buffer).Trim('\0');
+                var bytesSent = client.Receive(buffer, SocketFlags.None);
+                var number = Encoding.UTF8.GetString(buffer.Take(bytesSent).ToArray());
                 var numbers = number.Replace("+", " ").Replace("-", " ").Split(' ');
                 var result = Convert.ToInt32(numbers[0]) + Convert.ToInt32(numbers[1]);
                 client.Send(Encoding.UTF8.GetBytes(result.ToString()), SocketFlags.None);
