@@ -30,16 +30,16 @@ namespace StreamServer
         }
 
         private readonly Socket _Connection;
-
+        private readonly ConnectionHandler ConnectionEvent;
         private BinaryWriter StreamWriter;
         private BinaryReader StreamReader;
 
-        public ClientConnection(Socket Connection, Guid ClientID)
+        public ClientConnection(Socket Connection, Guid ClientID, ConnectionHandler ConnectionHandler)
         {
             ConnectedAt = DateTime.Now;
             _Connection = Connection;
             this.ClientID = ClientID;
-
+            ConnectionEvent = ConnectionHandler;
             GetWriter();
             GetReader();
         }
@@ -49,19 +49,29 @@ namespace StreamServer
         {
             Reader = Task.Factory.StartNew(()=> 
             {
-
                 if (IsConencted)
                 {
                     StreamReader = new BinaryReader(new NetworkStream(_Connection, FileAccess.Read), Encoding.UTF8, true);
                 }
 
-                while (IsConencted)
+                try
                 {
-                    // Keep Reading and waiting
-                    var result = StreamReader.ReadString();
-                    // Process this result
-                    Console.WriteLine($"Client {ClientID.ToString()} said {result}");
-                    // Go back to waiting for content
+                    ConnectionEvent?.Invoke(this, false);
+                    while (IsConencted)
+                    {
+                        // Keep Reading and waiting
+                        var result = StreamReader.ReadString();
+                        // Process this result
+                        Console.WriteLine($"Client {ClientID.ToString()} said {result}");
+                        // Go back to waiting for content
+                    }
+                }
+                catch (EndOfStreamException disconnected)
+                {
+                    _Connection.Close();
+                    // The user has disconnected from the stream
+                    ConnectionEvent?.Invoke(this, true);
+
                 }
             });
         }

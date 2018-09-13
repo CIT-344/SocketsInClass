@@ -11,6 +11,7 @@ namespace StreamClient
     {
         static void Main(string[] args)
         {
+            Console.Title = "Client";
             Socket _client = new Socket(AddressFamily.InterNetwork,
                 SocketType.Stream, ProtocolType.Tcp);
 
@@ -26,7 +27,19 @@ namespace StreamClient
                 while (_client.Connected)
                 {
                     Console.WriteLine("Enter text to send");
-                    bWriter.Write(Console.ReadLine());
+                    var line = Console.ReadLine();
+
+                    switch (line)
+                    {
+                        case "/exit":
+                            _client.Disconnect(false);
+                            break;
+                        default:
+                            bWriter.Write(line);
+                            break;
+                    }
+
+                    
                 }
             }
 
@@ -40,14 +53,21 @@ namespace StreamClient
         {
             if (Server.Connected)
             {
-                using (var StreamReader = new BinaryReader(new NetworkStream(Server), Encoding.UTF8, true))
+                try
                 {
-                    while (Server.Connected)
+                    using (var StreamReader = new BinaryReader(new NetworkStream(Server), Encoding.UTF8, true))
                     {
-                        // Keep Reading and waiting
-                        var result = StreamReader.ReadString();
-                        Console.WriteLine($"Server said {result}");
+                        while (Server.Connected)
+                        {
+                            // Keep Reading and waiting
+                            var result = StreamReader.ReadString();
+                            Console.WriteLine($"Server said {result}");
+                        }
                     }
+                }
+                catch (EndOfStreamException disconnect)
+                {
+                    
                 }
             }
 
