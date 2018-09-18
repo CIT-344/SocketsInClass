@@ -6,6 +6,12 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
+/*
+ * Cody Fraker
+ * Dave Vanaman
+ * Bailey Miller
+ */
+
 namespace Client
 {
     class Program
@@ -15,7 +21,15 @@ namespace Client
         {
             Console.WriteLine("Trying to connect to server");
 
-            StartClient();
+            try
+            {
+                StartClient();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("An error has occured, press any key to exit.");
+                Console.ReadKey();
+            }
         }
 
         static void StartClient()

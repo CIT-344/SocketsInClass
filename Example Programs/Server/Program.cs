@@ -6,6 +6,13 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
+
+/*
+ * Cody Fraker
+ * Dave Vanaman
+ * Bailey Miller
+ */
+
 namespace Server
 {
     class Program
@@ -15,7 +22,15 @@ namespace Server
         static void Main(string[] args)
         {
             Console.WriteLine("Starting Server on Port");
-            StartServer();
+            try
+            {
+                StartServer();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("An error has occured, press any key to exit.");
+                Console.ReadKey();
+            }
         }
 
 
