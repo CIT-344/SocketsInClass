@@ -14,7 +14,7 @@ namespace StreamServer
 {
     public delegate void ConnectionHandler(ClientConnection sender, bool IsDisconnect);
     public delegate void InBoundMessageHandler(ClientConnection Connection,Communication_Model Data);
-    class Program: IEventStorage
+    class Program
     {
         static Socket _server;
 
@@ -53,18 +53,6 @@ namespace StreamServer
         private static void ClientMessageReceieved(ClientConnection Connection,Communication_Model Data)
         {
             throw new NotImplementedException();
-        }
-
-
-
-        public static void AddEvent(EventModel Event)
-        {
-
-        }
-
-        public static EventModel GetEvent(String EventName)
-        {
-
         }
 
 
